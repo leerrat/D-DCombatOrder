@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sélectionnez les personnages à supprimer"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <ListView
+        android:id="@+id/removeListView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:choiceMode="multipleChoice" />
+
+    <Button
+        android:id="@+id/confirmRemoveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Supprimer" />
+</LinearLayout>
