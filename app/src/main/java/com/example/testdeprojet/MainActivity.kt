@@ -24,11 +24,17 @@ import androidx.compose.runtime.*
 import android.content.Context
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Button
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.Color
 
 data class Perso(val Ordre:Int, val Nom:String, val Pdv: Int)
 val PersoList = mutableStateListOf<Perso>()
@@ -41,6 +47,7 @@ class MainActivity : ComponentActivity() {
         val buttonadd = findViewById<Button>(R.id.buttonAdd)
         val buttonremove = findViewById<Button>(R.id.buttonRemove)
         val composeView = findViewById<ComposeView>(R.id.composeView)
+        composeView.setBackgroundColor(android.graphics.Color.TRANSPARENT)
 
 
         buttonadd.setOnClickListener {
@@ -51,7 +58,7 @@ class MainActivity : ComponentActivity() {
         }
         composeView.setContent {
             TestDeProjetTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize().background(Color.Transparent)) { innerPadding ->
                     PersoList(
                         people = PersoList,
                         modifier = Modifier.padding(innerPadding)
@@ -147,7 +154,12 @@ class MainActivity : ComponentActivity() {
                 val perso = sortedPeople[index] // Obtenez l'objet actuel
                 ListItem(
                     headlineContent = {
-                        Text(text = "${perso.Nom}, Ordre: ${perso.Ordre}, PDV: ${perso.Pdv}")
+                        Column {
+                            Text(text = "${perso.Nom}, Ordre: ${perso.Ordre}, PDV: ${perso.Pdv}")
+                            Row{
+                                Icon(Icons.Default.Star, contentDescription = "star")
+                            }
+                        }
                     },
                     trailingContent = {
                         Row {
