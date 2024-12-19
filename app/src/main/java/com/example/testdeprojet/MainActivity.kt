@@ -26,16 +26,20 @@ import android.content.Intent
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Button
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.Color
+import androidx.compose.material.icons.twotone.Star
+import androidx.compose.material3.MaterialTheme
 
 data class Perso(val Ordre:Int, val Nom:String, val Pdv: Int)
 
@@ -167,14 +171,46 @@ class MainActivity : ComponentActivity() {
         val sortedPeople = people.sortedByDescending { it.Ordre }
         LazyColumn(modifier = modifier) {
             items(sortedPeople.size) { index ->
-                val perso = sortedPeople[index] // Obtenez l'objet actuel
+                val perso = sortedPeople[index]
+
+                // États pour chaque icône d'étoile, indépendants les uns des autres
+                val (isStarFilled1, setStarFilled1) = remember { mutableStateOf(true) }
+                val (isStarFilled2, setStarFilled2) = remember { mutableStateOf(true) }
+                val (isStarFilled3, setStarFilled3) = remember { mutableStateOf(true) }
+
                 ListItem(
                     modifier = Modifier.background(Color.Transparent),
                     headlineContent = {
                         Column {
                             Text(text = "${perso.Nom}, Ordre: ${perso.Ordre}, PDV: ${perso.Pdv}")
-                            Row{
-                                Icon(Icons.Default.Star, contentDescription = "star")
+                            Row {
+                                // Première étoile avec son propre état
+                                Icon(
+                                    imageVector = if (isStarFilled1) Icons.Filled.Star else Icons.TwoTone.Star,
+                                    contentDescription = if (isStarFilled1) "Star Filled" else "Star TwoTone",
+                                    tint = if (isStarFilled1) Color(0xFF006400) else Color.Gray,
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clickable { setStarFilled1(!isStarFilled1) } // Changer uniquement cette étoile
+                                )
+                                // Deuxième étoile avec son propre état
+                                Icon(
+                                    imageVector = if (isStarFilled2) Icons.Filled.Star else Icons.TwoTone.Star,
+                                    contentDescription = if (isStarFilled2) "Star Filled2" else "Star TwoTone2",
+                                    tint = if (isStarFilled2) Color(0xFFFF9800) else Color.Gray,
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clickable { setStarFilled2(!isStarFilled2) } // Changer uniquement cette étoile
+                                )
+                                // Troisième étoile avec son propre état
+                                Icon(
+                                    imageVector = if (isStarFilled3) Icons.Filled.Star else Icons.TwoTone.Star,
+                                    contentDescription = if (isStarFilled3) "Star Filled3" else "Star TwoTone3",
+                                    tint = if (isStarFilled3) Color(0xFF800080) else Color.Gray,
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clickable { setStarFilled3(!isStarFilled3) } // Changer uniquement cette étoile
+                                )
                             }
                         }
                     },
@@ -201,6 +237,8 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+
 
     @Preview(showBackground = true)
     @Composable
