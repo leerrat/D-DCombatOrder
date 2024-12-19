@@ -38,9 +38,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.Color
 
 data class Perso(val Ordre:Int, val Nom:String, val Pdv: Int)
-val PersoList = mutableStateListOf<Perso>()
 
 class MainActivity : ComponentActivity() {
+
+    companion object {
+        // Liste globale accessible à partir de toute autre classe
+        val PersoList = mutableStateListOf<Perso>()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
