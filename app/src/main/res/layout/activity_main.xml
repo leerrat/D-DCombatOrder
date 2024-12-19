@@ -2,6 +2,7 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
         android:layout_height="match_parent">
     <ImageView
@@ -11,53 +12,68 @@
         android:scaleType="centerCrop"
         android:src="@drawable/fond_main" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@android:color/transparent"
+        tools:ignore="ExtraText">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="103dp"
+            android:src="@drawable/dnd" />
+
+        <!-- Nouveau bouton ajouté ici -->
+        <Button
+            android:id="@+id/buttonNewAction"
+            android:layout_width="66dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/round_button"
+            android:padding="12dp"
+            android:textSize="16sp" />
+        <!-- Espacement interne pour donner un effet de bouton rond -->
+
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:background="@android:color/transparent">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="103dp"
-                android:src="@drawable/dnd" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"
-                android:padding="1dp">
-
-                <Button
-                    android:id="@+id/buttonAdd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ajoutez Personnage"
-                    android:layout_marginEnd="8dp" />
-
-                <Button
-                    android:id="@+id/buttonRemove"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="Retirez Personnage" />
-            </LinearLayout>
-
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/composeView"
-                android:layout_width="match_parent"
-                android:layout_height="474dp"
-                android:background="@android:color/transparent" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:padding="1dp">
 
             <Button
-                android:id="@+id/buttonNextPage"
+                android:id="@+id/buttonAdd"
                 android:layout_width="wrap_content"
-                android:layout_height="61dp"
-                android:text="Créez des ennemis"
-                android:background="@drawable/boutenne" />
+                android:layout_height="wrap_content"
+                android:text="Ajoutez Personnage"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/buttonRemove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Retirez Personnage" />
         </LinearLayout>
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/composeView"
+            android:layout_width="match_parent"
+            android:layout_height="474dp"
+            android:background="@android:color/transparent" />
+
+        <Button
+            android:id="@+id/buttonNextPage"
+            android:layout_width="wrap_content"
+            android:layout_height="61dp"
+            android:text="Créez des ennemis"
+            android:background="@drawable/boutenne" />
+    </LinearLayout>
+
 
 </FrameLayout>

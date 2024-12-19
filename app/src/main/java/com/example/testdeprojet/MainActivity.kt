@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Button
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
@@ -41,7 +42,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material3.MaterialTheme
 
-data class Perso(val Ordre:Int, val Nom:String, val Pdv: Int)
+data class Perso(val Ordre:Int,
+                 val Nom:String,
+                 val Pdv: Int,
+                 var isStarFilled1: Boolean = true,
+                 var isStarFilled2: Boolean = true,
+                 var isStarFilled3: Boolean = true)
 
 class MainActivity : ComponentActivity() {
 
@@ -57,6 +63,9 @@ class MainActivity : ComponentActivity() {
         val buttonadd = findViewById<Button>(R.id.buttonAdd)
         val buttonremove = findViewById<Button>(R.id.buttonRemove)
         val composeView = findViewById<ComposeView>(R.id.composeView)
+        val buttonNewAction = findViewById<Button>(R.id.buttonNewAction)
+        var counter = 1
+        buttonNewAction.text = counter.toString()
         composeView.setBackgroundColor(android.graphics.Color.TRANSPARENT)
 
         val buttonNextPage = findViewById<Button>(R.id.buttonNextPage)
@@ -70,6 +79,19 @@ class MainActivity : ComponentActivity() {
         }
         buttonremove.setOnClickListener {
             showPopupRemove()
+        }
+        buttonNewAction.setOnClickListener {
+            counter += 1
+            buttonNewAction.text = counter.toString()
+            PersoList.forEach { perso ->
+                val updatedPerso = perso.copy(
+                    isStarFilled1 = true,
+                    isStarFilled2 = true,
+                    isStarFilled3 = true
+                )
+                // Remplacer l'ancien personnage par celui avec toutes les étoiles remplies
+                PersoList[PersoList.indexOf(perso)] = updatedPerso
+            }
         }
         composeView.setContent  {
             TestDeProjetTheme {
@@ -87,6 +109,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     private fun showPopupRemove() {
         if (PersoList.isEmpty()) {
             Toast.makeText(this, "Aucun personnage à supprimer", Toast.LENGTH_SHORT).show()
@@ -173,50 +196,53 @@ class MainActivity : ComponentActivity() {
             items(sortedPeople.size) { index ->
                 val perso = sortedPeople[index]
 
-                // États pour chaque icône d'étoile, indépendants les uns des autres
-                val (isStarFilled1, setStarFilled1) = remember { mutableStateOf(true) }
-                val (isStarFilled2, setStarFilled2) = remember { mutableStateOf(true) }
-                val (isStarFilled3, setStarFilled3) = remember { mutableStateOf(true) }
-
                 ListItem(
                     modifier = Modifier.background(Color.Transparent),
                     headlineContent = {
                         Column {
                             Text(text = "${perso.Nom}, Ordre: ${perso.Ordre}, PDV: ${perso.Pdv}")
                             Row {
-                                // Première étoile avec son propre état
+                                // Première étoile
                                 Icon(
-                                    imageVector = if (isStarFilled1) Icons.Filled.Star else Icons.TwoTone.Star,
-                                    contentDescription = if (isStarFilled1) "Star Filled" else "Star TwoTone",
-                                    tint = if (isStarFilled1) Color(0xFF006400) else Color.Gray,
+                                    imageVector = if (perso.isStarFilled1) Icons.Filled.Star else Icons.TwoTone.Star,
+                                    contentDescription = if (perso.isStarFilled1) "Star Filled" else "Star TwoTone",
+                                    tint = if (perso.isStarFilled1) Color(0xFF006400) else Color.Gray,
                                     modifier = Modifier
                                         .size(24.dp)
-                                        .clickable { setStarFilled1(!isStarFilled1) } // Changer uniquement cette étoile
+                                        .clickable { // Change uniquement l'état de cette étoile
+                                            val updatedPerso = perso.copy(isStarFilled1 = !perso.isStarFilled1)
+                                            PersoList[PersoList.indexOf(perso)] = updatedPerso
+                                        }
                                 )
-                                // Deuxième étoile avec son propre état
+                                // Deuxième étoile
                                 Icon(
-                                    imageVector = if (isStarFilled2) Icons.Filled.Star else Icons.TwoTone.Star,
-                                    contentDescription = if (isStarFilled2) "Star Filled2" else "Star TwoTone2",
-                                    tint = if (isStarFilled2) Color(0xFFFF9800) else Color.Gray,
+                                    imageVector = if (perso.isStarFilled2) Icons.Filled.Star else Icons.TwoTone.Star,
+                                    contentDescription = if (perso.isStarFilled2) "Star Filled2" else "Star TwoTone2",
+                                    tint = if (perso.isStarFilled2) Color(0xFFFF9800) else Color.Gray,
                                     modifier = Modifier
                                         .size(24.dp)
-                                        .clickable { setStarFilled2(!isStarFilled2) } // Changer uniquement cette étoile
+                                        .clickable {
+                                            val updatedPerso = perso.copy(isStarFilled2 = !perso.isStarFilled2)
+                                            PersoList[PersoList.indexOf(perso)] = updatedPerso
+                                        }
                                 )
-                                // Troisième étoile avec son propre état
+                                // Troisième étoile
                                 Icon(
-                                    imageVector = if (isStarFilled3) Icons.Filled.Star else Icons.TwoTone.Star,
-                                    contentDescription = if (isStarFilled3) "Star Filled3" else "Star TwoTone3",
-                                    tint = if (isStarFilled3) Color(0xFF800080) else Color.Gray,
+                                    imageVector = if (perso.isStarFilled3) Icons.Filled.Star else Icons.TwoTone.Star,
+                                    contentDescription = if (perso.isStarFilled3) "Star Filled3" else "Star TwoTone3",
+                                    tint = if (perso.isStarFilled3) Color(0xFF800080) else Color.Gray,
                                     modifier = Modifier
                                         .size(24.dp)
-                                        .clickable { setStarFilled3(!isStarFilled3) } // Changer uniquement cette étoile
+                                        .clickable {
+                                            val updatedPerso = perso.copy(isStarFilled3 = !perso.isStarFilled3)
+                                            PersoList[PersoList.indexOf(perso)] = updatedPerso
+                                        }
                                 )
                             }
                         }
                     },
                     trailingContent = {
                         Row {
-                            // Bouton pour décrémenter les points de vie
                             Button(onClick = {
                                 if (perso.Pdv > 0) {
                                     people[index] = perso.copy(Pdv = perso.Pdv - 1)
@@ -225,7 +251,6 @@ class MainActivity : ComponentActivity() {
                                 Text("-")
                             }
                             Spacer(modifier = Modifier.width(8.dp))
-                            // Bouton pour incrémenter les points de vie
                             Button(onClick = {
                                 people[index] = perso.copy(Pdv = perso.Pdv + 1)
                             }) {
@@ -237,7 +262,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
 
 
     @Preview(showBackground = true)
