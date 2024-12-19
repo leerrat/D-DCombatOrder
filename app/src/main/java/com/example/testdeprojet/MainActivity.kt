@@ -22,6 +22,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.compose.runtime.*
 import android.content.Context
+import android.content.Intent
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.compose.foundation.background
@@ -49,6 +50,11 @@ class MainActivity : ComponentActivity() {
         val composeView = findViewById<ComposeView>(R.id.composeView)
         composeView.setBackgroundColor(android.graphics.Color.TRANSPARENT)
 
+        val buttonNextPage = findViewById<Button>(R.id.buttonNextPage)
+        buttonNextPage.setOnClickListener {
+            val intent = Intent(this, MainActivity2::class.java)
+            startActivity(intent)
+        }
 
         buttonadd.setOnClickListener {
             showPopupAdd()
@@ -56,12 +62,17 @@ class MainActivity : ComponentActivity() {
         buttonremove.setOnClickListener {
             showPopupRemove()
         }
-        composeView.setContent {
+        composeView.setContent  {
             TestDeProjetTheme {
-                Scaffold(modifier = Modifier.fillMaxSize().background(Color.Transparent)) { innerPadding ->
+                Scaffold(
+                    containerColor = Color.Transparent, // Assurez-vous d'utiliser cette propriété
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Transparent) // Fond explicite transparent
+                ) {
                     PersoList(
                         people = PersoList,
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(it)
                     )
                 }
             }
@@ -153,6 +164,7 @@ class MainActivity : ComponentActivity() {
             items(sortedPeople.size) { index ->
                 val perso = sortedPeople[index] // Obtenez l'objet actuel
                 ListItem(
+                    modifier = Modifier.background(Color.Transparent),
                     headlineContent = {
                         Column {
                             Text(text = "${perso.Nom}, Ordre: ${perso.Ordre}, PDV: ${perso.Pdv}")
