@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:layout_height="match_parent">
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
@@ -26,7 +25,6 @@
             android:layout_height="103dp"
             android:src="@drawable/dnd" />
 
-        <!-- Nouveau bouton ajouté ici -->
         <Button
             android:id="@+id/buttonNewAction"
             android:layout_width="66dp"
@@ -36,8 +34,6 @@
             android:background="@drawable/round_button"
             android:padding="12dp"
             android:textSize="16sp" />
-        <!-- Espacement interne pour donner un effet de bouton rond -->
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,16 +44,18 @@
 
             <Button
                 android:id="@+id/buttonAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ajoutez Personnage"
-                android:layout_marginEnd="8dp" />
+                android:layout_width="200dp"
+                android:layout_height="61dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/boutonne"
+                android:text="Ajoutez Personnage" />
 
             <Button
                 android:id="@+id/buttonRemove"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="188dp"
+                android:layout_height="63dp"
                 android:layout_marginEnd="8dp"
+                android:background="@drawable/boutonne"
                 android:text="Retirez Personnage" />
         </LinearLayout>
 
@@ -72,6 +70,13 @@
             android:layout_width="wrap_content"
             android:layout_height="61dp"
             android:text="Créez des ennemis"
+            android:background="@drawable/boutenne" />
+
+        <Button
+            android:id="@+id/buttonReset"
+            android:layout_width="wrap_content"
+            android:layout_height="61dp"
+            android:text="Relancez un combat"
             android:background="@drawable/boutenne" />
     </LinearLayout>
 

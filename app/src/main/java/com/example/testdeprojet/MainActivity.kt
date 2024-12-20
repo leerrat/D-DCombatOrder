@@ -2,9 +2,7 @@ package com.example.testdeprojet
 import android.app.AlertDialog
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TableLayout
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,11 +19,11 @@ import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.Toast
 import androidx.compose.runtime.*
-import android.content.Context
 import android.content.Intent
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -34,13 +32,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Button
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material.icons.twotone.Star
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextField
+import androidx.compose.ui.Alignment
 
 data class Perso(val Ordre:Int,
                  val Nom:String,
@@ -51,8 +49,7 @@ data class Perso(val Ordre:Int,
 
 class MainActivity : ComponentActivity() {
 
-    companion object {
-        // Liste globale accessible à partir de toute autre classe
+    companion object {//List que tout le monde peut utiliser.
         val PersoList = mutableStateListOf<Perso>()
     }
 
@@ -64,7 +61,8 @@ class MainActivity : ComponentActivity() {
         val buttonremove = findViewById<Button>(R.id.buttonRemove)
         val composeView = findViewById<ComposeView>(R.id.composeView)
         val buttonNewAction = findViewById<Button>(R.id.buttonNewAction)
-        var counter = 1
+        val buttonReset = findViewById<Button>(R.id.buttonReset)
+        var counter = 1 //round commence à 1
         buttonNewAction.text = counter.toString()
         composeView.setBackgroundColor(android.graphics.Color.TRANSPARENT)
 
@@ -74,9 +72,19 @@ class MainActivity : ComponentActivity() {
             startActivity(intent)
         }
 
+        buttonReset.setOnClickListener{
+            PersoList.clear()
+
+            counter = 1
+            buttonNewAction.text = counter.toString()
+
+            Toast.makeText(this, "C'est partie pour un nouveau combat", Toast.LENGTH_SHORT).show()
+        }
+
         buttonadd.setOnClickListener {
             showPopupAdd()
         }
+
         buttonremove.setOnClickListener {
             showPopupRemove()
         }
@@ -89,17 +97,16 @@ class MainActivity : ComponentActivity() {
                     isStarFilled2 = true,
                     isStarFilled3 = true
                 )
-                // Remplacer l'ancien personnage par celui avec toutes les étoiles remplies
                 PersoList[PersoList.indexOf(perso)] = updatedPerso
             }
         }
         composeView.setContent  {
             TestDeProjetTheme {
                 Scaffold(
-                    containerColor = Color.Transparent, // Assurez-vous d'utiliser cette propriété
+                    containerColor = Color.Transparent,
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Transparent) // Fond explicite transparent
+                        .background(Color.Transparent)
                 ) {
                     PersoList(
                         people = PersoList,
@@ -118,22 +125,19 @@ class MainActivity : ComponentActivity() {
         val inflater = LayoutInflater.from(this)
         val popupView = inflater.inflate(R.layout.supp_perso, null)
 
-        // Références aux éléments du pop-up
         val listView = popupView.findViewById<ListView>(R.id.removeListView)
         val confirmButton = popupView.findViewById<Button>(R.id.confirmRemoveButton)
 
-        // Créer un adaptateur pour afficher les personnages
         val persoNames = PersoList.map { it.Nom }
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, persoNames)
         listView.adapter = adapter
 
-        // Créer la boîte de dialogue
         val dialog = AlertDialog.Builder(this)
             .setView(popupView)
             .create()
 
         confirmButton.setOnClickListener {
-            // Obtenir les positions sélectionnées
+
             val selectedPositions = listView.checkedItemPositions
             val toRemove = mutableListOf<Perso>()
 
@@ -146,7 +150,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            // Supprimer les personnages sélectionnés
             if (toRemove.isNotEmpty()) {
                 PersoList.removeAll(toRemove)
                 Toast.makeText(this, "Personnages supprimés : ${toRemove.joinToString { it.Nom }}", Toast.LENGTH_SHORT).show()
@@ -154,10 +157,8 @@ class MainActivity : ComponentActivity() {
                 Toast.makeText(this, "Aucun personnage sélectionné", Toast.LENGTH_SHORT).show()
             }
 
-            dialog.dismiss() // Fermer le pop-up
+            dialog.dismiss()
         }
-
-        // Afficher la boîte de dialogue
         dialog.show()
     }
     private fun showPopupAdd() {
@@ -192,17 +193,17 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun PersoList(people: MutableList<Perso>, modifier: Modifier = Modifier) {
         val sortedPeople = people.sortedByDescending { it.Ordre }
-        LazyColumn(modifier = modifier) {
+        LazyColumn(modifier = modifier.fillMaxSize().background(Color.Transparent)) {
             items(sortedPeople.size) { index ->
                 val perso = sortedPeople[index]
+                var pdvChange by remember { mutableStateOf("") }
 
                 ListItem(
-                    modifier = Modifier.background(Color.Transparent),
+                    modifier = Modifier.background(Color.Transparent).padding(2.dp).border(3.dp, Color.Black),
                     headlineContent = {
                         Column {
                             Text(text = "${perso.Nom}, Ordre: ${perso.Ordre}, PDV: ${perso.Pdv}")
                             Row {
-                                // Première étoile
                                 Icon(
                                     imageVector = if (perso.isStarFilled1) Icons.Filled.Star else Icons.TwoTone.Star,
                                     contentDescription = if (perso.isStarFilled1) "Star Filled" else "Star TwoTone",
@@ -214,7 +215,13 @@ class MainActivity : ComponentActivity() {
                                             PersoList[PersoList.indexOf(perso)] = updatedPerso
                                         }
                                 )
-                                // Deuxième étoile
+                                Text(
+                                    text =  "Action",
+                                    modifier = Modifier.padding(start = 4.dp),
+                                    color = if (perso.isStarFilled1) Color(0xFF006400) else Color.Gray
+                                )
+                            }
+                            Row {
                                 Icon(
                                     imageVector = if (perso.isStarFilled2) Icons.Filled.Star else Icons.TwoTone.Star,
                                     contentDescription = if (perso.isStarFilled2) "Star Filled2" else "Star TwoTone2",
@@ -222,37 +229,65 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier
                                         .size(24.dp)
                                         .clickable {
-                                            val updatedPerso = perso.copy(isStarFilled2 = !perso.isStarFilled2)
+                                            val updatedPerso =
+                                                perso.copy(isStarFilled2 = !perso.isStarFilled2)
                                             PersoList[PersoList.indexOf(perso)] = updatedPerso
                                         }
                                 )
-                                // Troisième étoile
-                                Icon(
-                                    imageVector = if (perso.isStarFilled3) Icons.Filled.Star else Icons.TwoTone.Star,
-                                    contentDescription = if (perso.isStarFilled3) "Star Filled3" else "Star TwoTone3",
-                                    tint = if (perso.isStarFilled3) Color(0xFF800080) else Color.Gray,
-                                    modifier = Modifier
-                                        .size(24.dp)
-                                        .clickable {
-                                            val updatedPerso = perso.copy(isStarFilled3 = !perso.isStarFilled3)
-                                            PersoList[PersoList.indexOf(perso)] = updatedPerso
-                                        }
+                                Text(
+                                    text = "Bonus",
+                                    modifier = Modifier.padding(start = 4.dp),
+                                    color = if (perso.isStarFilled2) Color(0xFFFF9800) else Color.Gray
+                                )
+                            }
+
+                            Row { Icon(
+                                imageVector = if (perso.isStarFilled3) Icons.Filled.Star else Icons.TwoTone.Star,
+                                contentDescription = if (perso.isStarFilled3) "Star Filled3" else "Star TwoTone3",
+                                tint = if (perso.isStarFilled3) Color(0xFF800080) else Color.Gray,
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clickable {
+                                        val updatedPerso = perso.copy(isStarFilled3 = !perso.isStarFilled3)
+                                        PersoList[PersoList.indexOf(perso)] = updatedPerso
+                                    }
+                            )
+                                Text(
+                                    text =  "Réaction",
+                                    modifier = Modifier.padding(start = 4.dp),
+                                    color = if (perso.isStarFilled3) Color(0xFF800080) else Color.Gray
                                 )
                             }
                         }
                     },
                     trailingContent = {
-                        Row {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            TextField(
+                                value = pdvChange,
+                                onValueChange = { pdvChange = it },
+                                label = { Text("PDV") },
+                                modifier = Modifier.width(80.dp)
+                            )
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
                             Button(onClick = {
-                                if (perso.Pdv > 0) {
-                                    people[index] = perso.copy(Pdv = perso.Pdv - 1)
+                                val changeValue = pdvChange.toIntOrNull() ?: 0
+                                if (changeValue > 0) {
+                                    val newPdv = (perso.Pdv - changeValue).coerceAtLeast(0)
+                                    people[index] = perso.copy(Pdv = newPdv)
                                 }
                             }) {
                                 Text("-")
                             }
+
                             Spacer(modifier = Modifier.width(8.dp))
+
                             Button(onClick = {
-                                people[index] = perso.copy(Pdv = perso.Pdv + 1)
+                                val changeValue = pdvChange.toIntOrNull() ?: 0
+                                if (changeValue > 0) {
+                                    people[index] = perso.copy(Pdv = perso.Pdv + changeValue)
+                                }
                             }) {
                                 Text("+")
                             }

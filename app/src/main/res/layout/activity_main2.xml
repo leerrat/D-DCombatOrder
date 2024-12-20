@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp">
+    android:padding="70dp"
+    android:background="@drawable/fond_main">
 
-    <!-- EditText pour saisir le nom de l'ennemi -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="103dp"
+        android:src="@drawable/dnd" />
+
     <EditText
         android:id="@+id/editTextEnemyName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nom de l'ennemi"
+        android:hint="Nom des ennemis"
         android:inputType="text" />
 
-    <!-- EditText pour saisir le nombre d'ennemis -->
     <EditText
         android:id="@+id/editTextNumEnemies"
         android:layout_width="match_parent"
@@ -22,7 +28,6 @@
         android:hint="Nombre d'ennemis"
         android:inputType="number" />
 
-    <!-- EditText pour saisir le bonus d'ordre -->
     <EditText
         android:id="@+id/editTextBonusOrdre"
         android:layout_width="match_parent"
@@ -30,7 +35,6 @@
         android:hint="Bonus d'ordre"
         android:inputType="numberSigned" />
 
-    <!-- EditText pour saisir les points de vie -->
     <EditText
         android:id="@+id/editTextPdv"
         android:layout_width="match_parent"
@@ -38,19 +42,18 @@
         android:hint="Points de vie"
         android:inputType="number" />
 
-    <!-- Button pour appliquer les changements et créer les ennemis -->
     <Button
         android:id="@+id/buttonCreateEnemies"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="196dp"
+        android:layout_height="77dp"
+        android:background="@drawable/boutton"
         android:text="Créer les ennemis" />
 
     <Button
         android:id="@+id/buttonBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="117dp"
+        android:layout_height="76dp"
+        android:background="@drawable/boutton"
         android:text="Retour" />
 
 </LinearLayout>
-
-
