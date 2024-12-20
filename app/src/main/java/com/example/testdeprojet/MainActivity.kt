@@ -49,7 +49,7 @@ data class Perso(val Ordre:Int,
 
 class MainActivity : ComponentActivity() {
 
-    companion object {//List que tout le monde peut utiliser.
+    companion object {//List que tous les activity peuvent utiliser.
         val PersoList = mutableStateListOf<Perso>()
     }
 
@@ -60,11 +60,10 @@ class MainActivity : ComponentActivity() {
         val buttonadd = findViewById<Button>(R.id.buttonAdd)
         val buttonremove = findViewById<Button>(R.id.buttonRemove)
         val composeView = findViewById<ComposeView>(R.id.composeView)
-        val buttonNewAction = findViewById<Button>(R.id.buttonNewAction)
+        val buttonround = findViewById<Button>(R.id.buttonRound)
         val buttonReset = findViewById<Button>(R.id.buttonReset)
         var counter = 1 //round commence à 1
-        buttonNewAction.text = counter.toString()
-        composeView.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+        buttonround.text = counter.toString()
 
         val buttonNextPage = findViewById<Button>(R.id.buttonNextPage)
         buttonNextPage.setOnClickListener {
@@ -76,7 +75,7 @@ class MainActivity : ComponentActivity() {
             PersoList.clear()
 
             counter = 1
-            buttonNewAction.text = counter.toString()
+            buttonround.text = counter.toString()
 
             Toast.makeText(this, "C'est partie pour un nouveau combat", Toast.LENGTH_SHORT).show()
         }
@@ -88,9 +87,9 @@ class MainActivity : ComponentActivity() {
         buttonremove.setOnClickListener {
             showPopupRemove()
         }
-        buttonNewAction.setOnClickListener {
+        buttonround.setOnClickListener {
             counter += 1
-            buttonNewAction.text = counter.toString()
+            buttonround.text = counter.toString()
             PersoList.forEach { perso ->
                 val updatedPerso = perso.copy(
                     isStarFilled1 = true,
@@ -124,20 +123,15 @@ class MainActivity : ComponentActivity() {
         }
         val inflater = LayoutInflater.from(this)
         val popupView = inflater.inflate(R.layout.supp_perso, null)
-
         val listView = popupView.findViewById<ListView>(R.id.removeListView)
         val confirmButton = popupView.findViewById<Button>(R.id.confirmRemoveButton)
-
         val persoNames = PersoList.map { it.Nom }
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, persoNames)
         listView.adapter = adapter
-
         val dialog = AlertDialog.Builder(this)
             .setView(popupView)
             .create()
-
         confirmButton.setOnClickListener {
-
             val selectedPositions = listView.checkedItemPositions
             val toRemove = mutableListOf<Perso>()
 
@@ -149,14 +143,12 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-
             if (toRemove.isNotEmpty()) {
                 PersoList.removeAll(toRemove)
                 Toast.makeText(this, "Personnages supprimés : ${toRemove.joinToString { it.Nom }}", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Aucun personnage sélectionné", Toast.LENGTH_SHORT).show()
             }
-
             dialog.dismiss()
         }
         dialog.show()
@@ -295,16 +287,6 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             }
-        }
-    }
-
-
-    @Preview(showBackground = true)
-    @Composable
-    fun PeopleListPreview() {
-        val previewPeople = remember { mutableStateListOf(Perso(20, "Louis", 50)) }
-        TestDeProjetTheme {
-            PersoList(people = previewPeople)
         }
     }
 }

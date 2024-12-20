@@ -26,7 +26,7 @@
             android:src="@drawable/dnd" />
 
         <Button
-            android:id="@+id/buttonNewAction"
+            android:id="@+id/buttonRound"
             android:layout_width="66dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
